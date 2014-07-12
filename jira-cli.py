@@ -30,8 +30,8 @@ def create(project, type, epic, summary):
 @click.option('--type', '-t', default='Task', help='issue type name')
 @click.option('--epic', '-e', help='an epic to link to (issue id)')
 @click.argument('project')
-@click.argument('filename')
-def batch(project, epic, type, filename):
+@click.argument('file')
+def batch(project, epic, type, file):
     issue_dict = {}
     issue_dict['project'] = {'key': project}
     issue_dict['issuetype'] = {'name': type}
