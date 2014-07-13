@@ -36,6 +36,7 @@ def create(project, component, type, due, epic, summary, schedule):
 
     new_issue = jira.create_issue(fields=issue_dict)
 
+# todo: Modify batch so it reads due/schedule dates from the file
 @cli1.command()
 # @click.option('--project', '-p', default='PER', help='project key')
 @click.option('--type', '-t', default='Task', help='issue type name')
