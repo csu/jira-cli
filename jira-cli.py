@@ -12,9 +12,10 @@ def cli1():
 # @click.option('--project', '-p', default='PER', help='project key')
 @click.option('--type', '-t', default='Task', help='issue type name')
 @click.option('--epic', '-e', help='an epic to link to (issue id)')
+@click.option('--component', '-c', help='a component name')
 @click.argument('project')
 @click.argument('summary')
-def create(project, type, epic, summary):
+def create(project, component, type, epic, summary):
     """Create an issue"""
     issue_dict = {
         'project': {'key': project},
@@ -23,22 +24,27 @@ def create(project, type, epic, summary):
     }
     if epic:
         issue_dict['customfield_10001'] = epic
+    if component:
+        issue_dict['components'] = [{'name': component}]
     new_issue = jira.create_issue(fields=issue_dict)
 
 @cli1.command()
 # @click.option('--project', '-p', default='PER', help='project key')
 @click.option('--type', '-t', default='Task', help='issue type name')
 @click.option('--epic', '-e', help='an epic to link to (issue id)')
+@click.option('--component', '-c', help='a component name')
 @click.argument('project')
 @click.argument('file')
-def batch(project, epic, type, file):
+def batch(project, component, epic, type, file):
     issue_dict = {}
     issue_dict['project'] = {'key': project}
     issue_dict['issuetype'] = {'name': type}
     if epic:
         issue_dict['customfield_10001'] = epic
+    if component:
+        issue_dict['components'] = [{'name': component}]
 
-    with open(filename) as f:
+    with open(file) as f:
         content = f.readlines()
 
     for line in content:
