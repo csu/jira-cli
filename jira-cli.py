@@ -1,6 +1,7 @@
 from jira.client import JIRA
 import click
 from secret import *
+import csv
 
 jira = JIRA(options={'server': JIRA_SERVER}, basic_auth=(JIRA_USERNAME, JIRA_PASSWORD))
 
@@ -43,7 +44,7 @@ def create(project, component, type, due, epic, summary, schedule):
 @click.option('--epic', '-e', help='an epic to link to (issue KEY-ID)')
 @click.option('--component', '-c', help='a component name')
 @click.option('--due', '-d', help='date in format YYYY-MM-DD')
-@click.option('--schedule', '-s', help='date in format YYYY-MM-DD')
+@click.option('--schedule', '-s', help='date in format YYYY-MM-DD from csv, index on line (starting from 1), ; delimited')
 @click.argument('project')
 @click.argument('file')
 def batch(project, component, epic, due, type, file, schedule):
@@ -57,15 +58,15 @@ def batch(project, component, epic, due, type, file, schedule):
         issue_dict['components'] = [{'name': component}]
     if due:
         issue_dict['duedate'] = due
-    if schedule:
-        issue_dict['customfield_10012'] = schedule
 
-    with open(file) as f:
-        content = f.readlines()
-
-    for line in content:
-        issue_dict['summary'] = line
-        new_issue = jira.create_issue(fields=issue_dict)
+    with open('tasks.txt', 'rb') as file:
+        reader = csv.reader(file, delimiter=';')
+        for line in reader:
+            issue_dict['summary'] = line[0]
+            if schedule and len(line) > int(schedule):  # ex. if at index 1, len(line) needs to be >= 2
+                issue_dict['customfield_10012'] = line[int(schedule)]  # use provided index to get scheduled date
+            new_issue = jira.create_issue(fields=issue_dict)
+            # print issue_dict  # use to debug before actually batch creating
 
 cli = click.CommandCollection(sources=[cli1])
 
