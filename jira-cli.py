@@ -10,7 +10,6 @@ def cli1():
     pass
 
 @cli1.command()
-# @click.option('--project', '-p', default='PER', help='project key')
 @click.option('--type', '-t', default='Task', help='issue type name')
 @click.option('--epic', '-e', help='an epic to link to (issue id)')
 @click.option('--parent', '-p', help='a parent issue to link to')
@@ -41,9 +40,7 @@ def create(project, component, type, due, epic, parent, summary, schedule):
 
     new_issue = jira.create_issue(fields=issue_dict)
 
-# todo: Modify batch so it reads due/schedule dates from the file
 @cli1.command()
-# @click.option('--project', '-p', default='PER', help='project key')
 @click.option('--type', '-t', default='Task', help='issue type name')
 @click.option('--epic', '-e', help='an epic to link to (issue KEY-ID)')
 @click.option('--parent', '-p', help='a parent issue to link to')
