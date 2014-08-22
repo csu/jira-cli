@@ -50,6 +50,7 @@ def create(project, component, type, due, epic, parent, summary, schedule):
 @click.argument('project')
 @click.argument('file')
 def batch(project, component, epic, parent, due, type, file, schedule):
+    """Batch create issues"""
     issue_dict = {}
     issue_dict['project'] = {'key': project}
     issue_dict['issuetype'] = {'name': type}
