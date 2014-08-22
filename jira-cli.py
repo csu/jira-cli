@@ -65,7 +65,7 @@ def batch(project, component, epic, parent, due, type, file, schedule):
     if due:
         issue_dict['duedate'] = due
 
-    with open('tasks.txt', 'rb') as file:
+    with open(file, 'rb') as file:
         reader = csv.reader(file, delimiter=';')
         for line in reader:
             issue_dict['summary'] = line[0]
